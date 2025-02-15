@@ -1,4 +1,5 @@
 import { ChangeEvent, useState } from "react";
+import addIcon from "@/assets/icons/add.svg";
 
 export default function Home() {
   const [files, setFiles] = useState<File[]>([]);
@@ -26,19 +27,7 @@ export default function Home() {
               htmlFor="file-upload"
               className="flex items-center gap-2 px-8 py-4 bg-indigo-600 text-white rounded-lg cursor-pointer hover:bg-indigo-700 transition-all transform hover:scale-105 shadow-lg"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
+              <img src={addIcon} alt="add" className="w-6 h-6" />
               Upload Files
             </label>
             <input
