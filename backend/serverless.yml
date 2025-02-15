@@ -1,0 +1,46 @@
+service: guest-list-upload-tool
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
+    DYNAMO_DB_TABLE: 'GuestListTable'
+    S3_BUCKET_NAME: 'my-guest-list-uploads'
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+          Resource:
+            - "arn:aws:s3:::my-guest-list-uploads/*"
+        - Effect: Allow
+          Action:
+            - dynamodb:PutItem
+            - dynamodb:BatchWriteItem
+            - dynamodb:GetItem
+            - dynamodb:Query
+            - dynamodb:Scan
+          Resource:
+            - "arn:aws:dynamodb:us-east-1:*:table/GuestListTable"
+
+functions:
+  uploadCSV:
+    handler: src/handlers/uploadHandler.main
+    events:
+      - httpApi:
+          path: /guestlist/upload
+          method: POST
+
+  getGuestList:
+    handler: src/handlers/getGuestListHandler.main
+    events:
+      - httpApi:
+          path: /guestlist/{id}
+          method: GET
+
+plugins:
+  - serverless-offline
