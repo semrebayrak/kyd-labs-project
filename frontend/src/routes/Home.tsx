@@ -63,12 +63,6 @@ export default function Home() {
 
       setColumns(columns);
       setRows(rows);
-      setColumnMapping({
-        firstName: columns.length > 0 ? 0 : -1,
-        lastName: columns.length > 1 ? 1 : -1,
-        numberOfTickets: columns.length > 2 ? 2 : -1,
-        notes: columns.length > 3 ? 3 : -1,
-      });
     } catch (error) {
       setError("Error reading CSV file. Please try again.");
     }
