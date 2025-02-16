@@ -19,7 +19,7 @@ export const readFileAsText = (file: File): Promise<string> => {
 export const parseCSV = (fileText: string, hasHeader: boolean) => {
   const parsed = Papa.parse(fileText, {
     header: hasHeader,
-    skipEmptyLines: false,
+    skipEmptyLines: "greedy", // skip empty lines
   });
 
   if (hasHeader) {
@@ -45,4 +45,14 @@ export const parseCSV = (fileText: string, hasHeader: boolean) => {
       rows: rows,
     };
   }
+};
+
+export const calculateMissingFields = (
+  rows: string[][],
+  columnIndex: number
+) => {
+  const missingFields = rows.map((row) => {
+    return Object.values(row)[columnIndex] === "";
+  });
+  return missingFields.filter((field) => field);
 };

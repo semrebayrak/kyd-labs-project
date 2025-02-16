@@ -1,7 +1,7 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import ColumnMapping from "@/components/ColumnMapping";
 import UploadFile from "@/components/UploadFile";
-import { readFileAsText, parseCSV } from "@/utils/csv";
+import { readFileAsText, parseCSV, calculateMissingFields } from "@/utils/csv";
 import { uploadCSV } from "@/services/apiClient";
 import Success from "@/ui/Success";
 import { Link } from "react-router-dom";
@@ -20,10 +20,12 @@ export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   // columns array -> Column names to show in dropdown to user
   const [columns, setColumns] = useState<string[]>([]);
+  const [rows, setRows] = useState<string[][]>([]);
   const [hasHeader, setHasHeader] = useState<boolean | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [shareLink, setShareLink] = useState<string | null>(null);
+
   // User selection -> which index maps to which field
   const [columnMapping, setColumnMapping] = useState<ColumnMappingState>({
     firstName: -1,
@@ -57,9 +59,10 @@ export default function Home() {
         return;
       }
 
-      const { columns } = result;
+      const { columns, rows } = result;
 
       setColumns(columns);
+      setRows(rows);
       setColumnMapping({
         firstName: columns.length > 0 ? 0 : -1,
         lastName: columns.length > 1 ? 1 : -1,
@@ -130,6 +133,33 @@ export default function Home() {
       notes: -1,
     });
   };
+
+  // Validate that firstName is not missing
+  useEffect(() => {
+    // Skip validation if no rows exist
+    if (rows.length === 0) {
+      setError(null);
+      return;
+    }
+
+    // Check for missing first names
+    const missingFirstNames = calculateMissingFields(
+      rows,
+      columnMapping.firstName
+    );
+
+    if (missingFirstNames.length > 0) {
+      const message = `Found ${missingFirstNames.length} ${
+        missingFirstNames.length === 1 ? "attendee" : "attendees"
+      } with missing first name. They will not be added to the list.`;
+
+      setError(message);
+      return;
+    }
+
+    // Clear any existing errors if validation passes
+    setError(null);
+  }, [rows, columnMapping.firstName]);
 
   if (shareLink) {
     return (
