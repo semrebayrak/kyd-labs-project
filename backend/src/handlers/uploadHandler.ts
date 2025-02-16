@@ -99,9 +99,9 @@ export async function main(
     await batchWriteEntries(itemsForDB);
 
     // 9. Generate a shareable link
-    const shareableLink =
-      process.env.FRONTEND_URL ??
-      `https://kyd-labs-project.vercel.app/guestlist/${listId}`;
+    const shareableLink = `${
+      process.env.FRONTEND_URL ?? "https://kyd-labs-project.vercel.app"
+    }/guestlist/${listId}`;
 
     return {
       statusCode: 200,
