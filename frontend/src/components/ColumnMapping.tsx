@@ -1,16 +1,21 @@
 import React from "react";
 import Select from "@/ui/Select";
+import Switch from "@/ui/Switch";
 
 export interface ColumnMappingProps {
-  mapping: {
-    firstName: string;
-    lastName: string;
-    numberOfTickets: string;
-    notes: string;
-  };
-  onConfirm: () => void;
   columns: string[];
-  onChange: (field: keyof ColumnMappingProps["mapping"], value: string) => void;
+  mapping: {
+    firstName: number;
+    lastName: number;
+    numberOfTickets: number;
+    notes: number;
+  };
+  onChange: (
+    field: keyof ColumnMappingProps["mapping"],
+    colName: string
+  ) => void;
+  onConfirm: () => void;
+  onCancel: () => void;
 }
 
 const FIELD_LABELS: Record<keyof ColumnMappingProps["mapping"], string> = {
@@ -21,49 +26,56 @@ const FIELD_LABELS: Record<keyof ColumnMappingProps["mapping"], string> = {
 };
 
 const ColumnMapping: React.FC<ColumnMappingProps> = ({
-  mapping,
   columns,
+  mapping,
   onChange,
   onConfirm,
+  onCancel,
 }) => {
-  const options = columns.map((col) => ({ value: col, label: col }));
-  const noneOption = { value: "", label: "None" };
-  const optionsWithNone = [noneOption, ...options];
+  const noneOption = { value: "", label: "(None)" };
+  const dropdownOptions = [
+    noneOption,
+    ...columns.map((c) => ({ value: c, label: c })),
+  ];
+
+  // If mapping value is -1 return (None), otherwise match with columns[mapping[field]]
+  const getCurrentColumnName = (idx: number) =>
+    idx >= 0 && idx < columns.length ? columns[idx] : "";
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-8 max-w-2xl mx-auto border border-gray-100">
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Column Mapping
-        </h2>
-        <p className="text-gray-600 text-sm">
-          Note: If your CSV file does not include a header row, the columns will
-          be matched in the order they appear.
-        </p>
-      </div>
-      <div className="grid gap-6">
-        {(
-          Object.keys(FIELD_LABELS) as (keyof ColumnMappingProps["mapping"])[]
-        ).map((field) => (
-          <div key={field} className="relative">
+      <h2 className="text-2xl font-bold text-gray-900 mb-4">Column Mapping</h2>
+
+      {(
+        Object.keys(FIELD_LABELS) as (keyof ColumnMappingProps["mapping"])[]
+      ).map((field) => {
+        const currentIndex = mapping[field];
+        const currentColName = getCurrentColumnName(currentIndex);
+
+        return (
+          <div key={field} className="mb-4">
             <label className="block text-sm font-semibold text-gray-700 mb-2">
               {FIELD_LABELS[field]}
             </label>
             <Select
-              options={optionsWithNone}
-              value={
-                optionsWithNone.find((opt) => opt.value === mapping[field])
-                  ?.value || noneOption.value
-              }
-              onChange={(value) => onChange(field, value)}
+              options={dropdownOptions}
+              value={currentColName}
+              onChange={(val) => onChange(field, val)}
               placeholder="Select a column..."
             />
           </div>
-        ))}
-      </div>
-      <div className="mt-10">
+        );
+      })}
+
+      <div className="mt-6 flex gap-4">
         <button
-          className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition"
+          className="w-36 !bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition"
+          onClick={onCancel}
+        >
+          Cancel
+        </button>
+        <button
+          className="flex-1 text-white py-2 rounded-md hover:bg-indigo-700 transition"
           onClick={onConfirm}
         >
           Confirm Mapping

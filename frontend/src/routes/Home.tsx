@@ -1,83 +1,152 @@
 import { ChangeEvent, useState } from "react";
-import Papa from "papaparse";
 import ColumnMapping from "@/components/ColumnMapping";
-import { readFileAsText } from "@/utils/csv";
 import UploadFile from "@/components/UploadFile";
+import { readFileAsText, parseCSV } from "@/utils/csv";
+import { uploadCSV } from "@/services/apiClient";
+
+/**
+ * Mapping stores which column index corresponds to firstName, lastName etc.
+ * -1 => Can be used as None
+ */
+interface ColumnMappingState {
+  firstName: number;
+  lastName: number;
+  numberOfTickets: number;
+  notes: number;
+}
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
+  // columns array -> Column names to show in dropdown to user
   const [columns, setColumns] = useState<string[]>([]);
-  const [columnMapping, setColumnMapping] = useState({
-    firstName: "",
-    lastName: "",
-    numberOfTickets: "",
-    notes: "",
+  const [hasHeader, setHasHeader] = useState<boolean | undefined>(undefined);
+  // User selection -> which index maps to which field
+  const [columnMapping, setColumnMapping] = useState<ColumnMappingState>({
+    firstName: -1,
+    lastName: -1,
+    numberOfTickets: -1,
+    notes: -1,
   });
 
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files && files.length > 0) {
-      const selectedFile = files[0];
-      setFile(selectedFile);
-      try {
-        const fileText = await readFileAsText(selectedFile);
-        const parsed = Papa.parse(fileText, { header: true });
-        if (parsed.meta.fields) {
-          const headers = parsed.meta.fields;
-          setColumns(headers);
-          // By default place everything in order 1st row firstName, 2nd row lastName...
-          setColumnMapping({
-            firstName: headers[0] || "",
-            lastName: headers[1] || "",
-            numberOfTickets: headers[2] || "",
-            notes: headers[3] || "",
-          });
-        } else {
-          alert("CSV file does not contain header fields. Please try again.");
-        }
-      } catch (error) {
+    if (!files || files.length === 0) return;
+
+    const selectedFile = files[0];
+    setFile(selectedFile);
+  };
+
+  const handleParseFile = async (hasHeader: boolean) => {
+    setHasHeader(hasHeader);
+    if (!file) {
+      alert("No file selected.");
+      return;
+    }
+
+    try {
+      const fileText = await readFileAsText(file);
+
+      const result = parseCSV(fileText, hasHeader);
+
+      if (!result) {
         alert("Error reading CSV file. Please try again.");
+        return;
       }
+
+      const { columns } = result;
+
+      setColumns(columns);
+      setColumnMapping({
+        firstName: columns.length > 0 ? 0 : -1,
+        lastName: columns.length > 1 ? 1 : -1,
+        numberOfTickets: columns.length > 2 ? 2 : -1,
+        notes: columns.length > 3 ? 3 : -1,
+      });
+    } catch (error) {
+      alert("Error reading CSV file. Please try again.");
     }
   };
 
+  // When user selects a column in dropdown, find its index in columns array and update state
   const handleMappingChange = (
-    field: keyof typeof columnMapping,
-    value: string
+    field: keyof ColumnMappingState,
+    selectedColumnName: string
   ) => {
+    const idx = columns.indexOf(selectedColumnName);
     setColumnMapping((prev) => ({
       ...prev,
-      [field]: value,
+      [field]: idx,
     }));
   };
 
-  const handleConfirmMapping = () => {
-    if (!columnMapping.firstName) {
+  const handleConfirmMapping = async () => {
+    // firstName is required
+    if (columnMapping.firstName === -1) {
       alert(
-        "First Name column is required. Please select a column for First Name before continuing."
+        "First Name column is required. Please select a column for First Name."
       );
       return;
     }
+
+    if (!file) {
+      alert("No file selected.");
+      return;
+    }
+
+    // When sending to backend as multipart/form-data, include hasHeader info
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("columnMapping", JSON.stringify(columnMapping));
+    formData.append("hasHeader", JSON.stringify(hasHeader));
+
+    try {
+      const res = await uploadCSV(formData);
+      if (res?.success) {
+        alert(`Upload complete! Shareable link: ${res.shareableLink}`);
+      } else {
+        alert("Upload failed. Check console for details.");
+      }
+    } catch (err) {
+      alert("Error uploading CSV.");
+    }
+  };
+
+  const handleCancelMapping = () => {
+    setFile(null);
+    setColumns([]);
+    setHasHeader(undefined);
+    setColumnMapping({
+      firstName: -1,
+      lastName: -1,
+      numberOfTickets: -1,
+      notes: -1,
+    });
   };
 
   return (
     <div className="min-h-screen w-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <div className="text-center mb-12">
+        <div className="text-center mb-6">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">File Upload</h1>
           <p className="text-lg text-gray-600">
             Upload your CSV file and map its columns to the required fields.
           </p>
         </div>
-        {file ? (
+
+        {hasHeader !== undefined ? (
           <ColumnMapping
             columns={columns}
             mapping={columnMapping}
             onChange={handleMappingChange}
             onConfirm={handleConfirmMapping}
+            onCancel={handleCancelMapping}
           />
         ) : (
-          <UploadFile onFileUpload={handleFileUpload} />
+          <UploadFile
+            file={file}
+            onFileUpload={handleFileUpload}
+            handleParseFile={handleParseFile}
+          />
         )}
       </div>
     </div>
