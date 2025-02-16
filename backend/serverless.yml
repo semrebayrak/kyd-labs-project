@@ -7,7 +7,7 @@ provider:
   region: us-east-1
   environment:
     AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1'
-    DYNAMO_DB_TABLE: 'GuestListTable'
+    DYNAMO_DB_TABLE: 'GuestList'
     S3_BUCKET_NAME: 'my-guest-list-uploads'
   iam:
     role:
