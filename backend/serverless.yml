@@ -25,7 +25,7 @@ provider:
             - dynamodb:Query
             - dynamodb:Scan
           Resource:
-            - "arn:aws:dynamodb:us-east-1:*:table/GuestListTable"
+            - "arn:aws:dynamodb:us-east-1:*:table/GuestList"
 
 functions:
   uploadCSV:
@@ -34,6 +34,17 @@ functions:
       - httpApi:
           path: /guestlist/upload
           method: POST
+          cors: 
+            allowedOrigins:
+              - "*"
+            allowedHeaders:
+              - Content-Type
+              - Authorization
+            allowedMethods:
+              - OPTIONS
+              - POST
+            allowCredentials: false
+
 
   getGuestList:
     handler: src/handlers/getGuestListHandler.main
@@ -41,6 +52,16 @@ functions:
       - httpApi:
           path: /guestlist/{id}
           method: GET
+          cors: 
+            allowedOrigins:
+              - "*"
+            allowedHeaders:
+              - Content-Type
+              - Authorization
+            allowedMethods:
+              - OPTIONS
+              - GET
+            allowCredentials: false
 
 plugins:
   - serverless-offline
