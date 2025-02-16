@@ -106,7 +106,7 @@ export default function Home() {
 
     try {
       const res = await uploadCSV(formData);
-      if (res?.success) {
+      if (res.success) {
         setShareLink(res.shareableLink);
       } else {
         setError("Upload failed. Check console for details.");
