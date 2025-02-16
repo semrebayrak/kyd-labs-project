@@ -18,7 +18,7 @@ export default function Success({
           <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
             <img
               src={checkIcon}
-              alt="check"
+              alt="Check icon"
               className="w-8 h-8 text-green-500"
             />
           </div>

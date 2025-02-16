@@ -16,9 +16,9 @@ export default function UploadFile({
         <div className="flex justify-center mb-8">
           <label
             htmlFor="file-upload"
-            className="flex items-center gap-2 px-8 py-4 bg-indigo-600 text-white rounded-lg cursor-pointer hover:bg-indigo-700 transition-all transform hover:scale-105 shadow-lg"
+            className="cursor-pointer flex gap-2 items-center px-8 py-4 rounded-lg bg-indigo-600 text-white shadow-lg transform hover:bg-indigo-700 hover:scale-105 transition-all"
           >
-            <img src={addIcon} alt="add" className="w-6 h-6" />
+            <img src={addIcon} alt="Upload file icon" className="w-6 h-6" />
             Upload File
           </label>
           <input

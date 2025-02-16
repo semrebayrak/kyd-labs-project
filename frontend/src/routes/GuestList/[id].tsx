@@ -32,7 +32,6 @@ export default function GuestList() {
       try {
         const guestList = await getGuestList(id);
         const data = guestList.data;
-        console.log(data);
         if (data.length === 0) {
           setError("No guests found for this list.");
         } else {

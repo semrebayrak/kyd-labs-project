@@ -16,7 +16,11 @@ export default function Error({
       <div className="max-w-3xl mx-auto">
         <div className="bg-white rounded-xl shadow-lg p-8 text-center flex flex-col items-center">
           <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <img src={errorIcon} alt="error" className="w-8 h-8 text-red-500" />
+            <img
+              src={errorIcon}
+              alt="Error icon"
+              className="w-8 h-8 text-red-500"
+            />
           </div>
           {content}
           <button
