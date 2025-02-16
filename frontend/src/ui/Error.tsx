@@ -24,7 +24,7 @@ export default function Error({
             />
           </div>
           {content}
-          <Button onClick={onConfirm} className="!bg-red-600">
+          <Button onClick={onConfirm} variant="danger">
             {confirmText}
           </Button>
         </div>

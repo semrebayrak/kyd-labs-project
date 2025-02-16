@@ -74,7 +74,7 @@ const ColumnMapping: React.FC<ColumnMappingProps> = ({
       {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
 
       <div className="flex mt-6 gap-4">
-        <Button className="!w-36 !bg-red-600" onClick={onCancel}>
+        <Button size="sm" variant="danger" onClick={onCancel}>
           Cancel
         </Button>
         <Button className="flex-1" onClick={onConfirm} disabled={isLoading}>

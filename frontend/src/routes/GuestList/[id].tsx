@@ -62,7 +62,7 @@ export default function GuestList() {
         <div className="flex items-center justify-center mb-8 relative">
           <Button
             onClick={() => navigate("/")}
-            className="absolute left-0 top-2 flex items-center gap-2"
+            className="absolute left-0 top-2"
           >
             Back
           </Button>

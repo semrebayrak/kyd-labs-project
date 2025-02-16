@@ -24,7 +24,7 @@ export default function Success({
             />
           </div>
           {content}
-          <Button onClick={onConfirm} className="!bg-green-600">
+          <Button onClick={onConfirm} variant="success">
             {confirmText}
           </Button>
         </div>

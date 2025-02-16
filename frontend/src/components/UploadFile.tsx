@@ -47,8 +47,8 @@ export default function UploadFile({
               No, it doesn't
             </Button>
             <Button
+              variant="secondary"
               onClick={() => handleParseFile(file, true)}
-              className="!bg-indigo-600"
             >
               Yes, it has headers
             </Button>
