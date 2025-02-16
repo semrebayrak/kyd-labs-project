@@ -1,6 +1,5 @@
 import React from "react";
 import Select from "@/ui/Select";
-import Switch from "@/ui/Switch";
 
 export interface ColumnMappingProps {
   columns: string[];
