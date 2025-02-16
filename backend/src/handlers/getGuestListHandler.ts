@@ -15,11 +15,13 @@ export async function main(
 
     const items = await getEntriesByListId(listId);
 
+    const sortedItems = items.sort((a, b) => a.order - b.order);
+
     return {
       statusCode: 200,
       body: JSON.stringify({
         success: true,
-        data: items,
+        data: sortedItems,
       }),
     };
   } catch (error: any) {
