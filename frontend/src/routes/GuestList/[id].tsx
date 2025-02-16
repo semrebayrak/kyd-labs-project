@@ -1,8 +1,6 @@
 import { getGuestList } from "@/services/apiClient";
 import { Column } from "@/types/table";
-import Error from "@/ui/Error";
-import Loading from "@/ui/Loading";
-import { Table } from "@/ui/Table";
+import { Error, Loading, Table } from "@/ui";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 

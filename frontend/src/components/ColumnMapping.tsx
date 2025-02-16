@@ -1,4 +1,4 @@
-import Select from "@/ui/Select";
+import { Select } from "@/ui";
 import React from "react";
 
 export interface ColumnMappingProps {

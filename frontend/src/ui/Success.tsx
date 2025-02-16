@@ -1,4 +1,4 @@
-import checkIcon from "@/assets/icons/check.svg";
+import { checkIcon } from "@/assets/icons";
 
 interface SuccessProps {
   onConfirm: () => void;

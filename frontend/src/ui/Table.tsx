@@ -5,7 +5,7 @@ interface TableProps<T> {
   columns: Column<T>[];
 }
 
-export function Table<T>({ data, columns }: TableProps<T>) {
+export default function Table<T>({ data, columns }: TableProps<T>) {
   return (
     <div className="bg-white shadow-md rounded-lg overflow-hidden">
       <table className="min-w-full divide-y divide-gray-200">

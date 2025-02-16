@@ -1,4 +1,4 @@
-import addIcon from "@/assets/icons/add.svg";
+import { addIcon } from "@/assets/icons";
 import { ChangeEvent } from "react";
 
 export default function UploadFile({

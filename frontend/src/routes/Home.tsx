@@ -1,8 +1,7 @@
-import ColumnMapping from "@/components/ColumnMapping";
-import UploadFile from "@/components/UploadFile";
+import { ColumnMapping, UploadFile } from "@/components";
 import { useCsvParse } from "@/hooks/useCsvParse";
 import { uploadCSV } from "@/services/apiClient";
-import Success from "@/ui/Success";
+import { Success } from "@/ui";
 import { calculateMissingFields } from "@/utils/csv";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";

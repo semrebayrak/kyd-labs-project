@@ -1,4 +1,4 @@
-import errorIcon from "@/assets/icons/error.svg";
+import { errorIcon } from "@/assets/icons";
 
 interface ErrorProps {
   onConfirm: () => void;
