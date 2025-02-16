@@ -27,7 +27,10 @@ export const parseCSV = (fileText: string, hasHeader: boolean) => {
     if (parsed.meta.fields) {
       // For example: ["Name", "Email", "Age"]
       return {
-        columns: parsed.meta.fields,
+        // Remove _ prefixed columns because they are empty
+        columns: parsed.meta.fields.map((field) =>
+          field.startsWith("_") ? "" : field
+        ),
         rows: parsed.data as string[][],
       };
     }

@@ -36,11 +36,13 @@ const ColumnMapping: React.FC<ColumnMappingProps> = ({
   error,
 }) => {
   const noneOption = { value: "", label: "(None)" };
+  console.log(columns);
   const dropdownOptions = [
     noneOption,
-    ...columns.map((c) => ({ value: c, label: c })),
+    ...columns.map((c) => ({ value: c, label: c || "Missing Column Name" })),
   ];
 
+  console.log(dropdownOptions);
   // If mapping value is -1 return (None), otherwise match with columns[mapping[field]]
   const getCurrentColumnName = (idx: number) =>
     idx >= 0 && idx < columns.length ? columns[idx] : "";
