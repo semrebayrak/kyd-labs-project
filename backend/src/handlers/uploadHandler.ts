@@ -1,9 +1,9 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import Busboy from "busboy";
-import { uploadToS3 } from "../utils/s3Service";
+import { v4 as uuidv4 } from "uuid";
 import { parseCSVAndMap } from "../services/csvService";
 import { batchWriteEntries } from "../services/dynamoDbService";
-import { v4 as uuidv4 } from "uuid";
+import { uploadToS3 } from "../utils/s3Service";
 
 export async function main(
   event: APIGatewayProxyEvent
@@ -111,13 +111,13 @@ export async function main(
         shareableLink,
       }),
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("uploadHandler error:", error);
     return {
       statusCode: 500,
       body: JSON.stringify({
         message: "Internal server error",
-        error: error.message,
+        error: error instanceof Error ? error.message : "Unknown error",
       }),
     };
   }

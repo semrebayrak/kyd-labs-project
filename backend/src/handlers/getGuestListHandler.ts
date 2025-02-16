@@ -24,14 +24,14 @@ export async function main(
         data: sortedItems,
       }),
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("getGuestListHandler error:", error);
 
     return {
       statusCode: 500,
       body: JSON.stringify({
         message: "Internal server error",
-        error: error.message,
+        error: error instanceof Error ? error.message : "Unknown error",
       }),
     };
   }
