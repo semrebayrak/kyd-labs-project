@@ -36,8 +36,8 @@ const Select = ({ options, value, onChange, placeholder }: SelectProps) => {
           backgroundColor: isSelected
             ? "black"
             : isFocused
-            ? "#EEF2FF"
-            : "white",
+              ? "#EEF2FF"
+              : "white",
         }),
         singleValue: (baseStyles) => ({
           ...baseStyles,

@@ -1,7 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-import Home from "@/routes/Home";
 import GuestList from "@/routes/GuestList/[id]";
+import Home from "@/routes/Home";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 
 function App() {
   return (

@@ -4,7 +4,7 @@ import Error from "@/ui/Error";
 import Loading from "@/ui/Loading";
 import { Table } from "@/ui/Table";
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface Guest {
   firstName: string;

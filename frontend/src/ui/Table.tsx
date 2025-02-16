@@ -1,5 +1,5 @@
-import { ReactNode } from "react";
 import { Column } from "@/types/table";
+import { ReactNode } from "react";
 interface TableProps<T> {
   data: T[];
   columns: Column<T>[];

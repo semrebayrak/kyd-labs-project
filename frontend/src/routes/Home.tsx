@@ -1,9 +1,9 @@
-import { ChangeEvent, useEffect, useState } from "react";
 import ColumnMapping from "@/components/ColumnMapping";
 import UploadFile from "@/components/UploadFile";
-import { readFileAsText, parseCSV, calculateMissingFields } from "@/utils/csv";
 import { uploadCSV } from "@/services/apiClient";
 import Success from "@/ui/Success";
+import { calculateMissingFields, parseCSV, readFileAsText } from "@/utils/csv";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 /**
  * Mapping stores which column index corresponds to firstName, lastName etc.
