@@ -1,8 +1,9 @@
 import ColumnMapping from "@/components/ColumnMapping";
 import UploadFile from "@/components/UploadFile";
+import { useCsvParse } from "@/hooks/useCsvParse";
 import { uploadCSV } from "@/services/apiClient";
 import Success from "@/ui/Success";
-import { calculateMissingFields, parseCSV, readFileAsText } from "@/utils/csv";
+import { calculateMissingFields } from "@/utils/csv";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 /**
@@ -19,12 +20,11 @@ interface ColumnMappingState {
 export default function Home() {
   const [file, setFile] = useState<File | null>(null);
   // columns array -> Column names to show in dropdown to user
-  const [columns, setColumns] = useState<string[]>([]);
-  const [rows, setRows] = useState<string[][]>([]);
   const [hasHeader, setHasHeader] = useState<boolean | undefined>(undefined);
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [shareLink, setShareLink] = useState<string | null>(null);
+  const { error: csvParseError, columns, rows, parse } = useCsvParse();
+  const [error, setError] = useState<string | null>(null);
 
   // User selection -> which index maps to which field
   const [columnMapping, setColumnMapping] = useState<ColumnMappingState>({
@@ -34,6 +34,12 @@ export default function Home() {
     notes: -1,
   });
 
+  const handleParseFile = async (file: File | null, hasHeader: boolean) => {
+    if (hasHeader === undefined || !file) return;
+    setHasHeader(hasHeader);
+    await parse(file, hasHeader);
+  };
+
   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
@@ -41,32 +47,6 @@ export default function Home() {
     const selectedFile = files[0];
     setFile(selectedFile);
     setError(null);
-  };
-
-  const handleParseFile = async (hasHeader: boolean) => {
-    setHasHeader(hasHeader);
-    if (!file) {
-      setError("No file selected.");
-      return;
-    }
-
-    try {
-      const fileText = await readFileAsText(file);
-
-      const result = parseCSV(fileText, hasHeader);
-
-      if (!result) {
-        setError("Error reading CSV file. Please try again.");
-        return;
-      }
-
-      const { columns, rows } = result;
-
-      setColumns(columns);
-      setRows(rows);
-    } catch (_error) {
-      setError("Error reading CSV file. Please try again.");
-    }
   };
 
   // When user selects a column in dropdown, find its index in columns array and update state
@@ -116,11 +96,9 @@ export default function Home() {
     }
   };
 
-  const handleCancelMapping = () => {
+  const handleReset = () => {
     setShareLink(null);
     setFile(null);
-    setColumns([]);
-    setRows([]);
     setHasHeader(undefined);
     setColumnMapping({
       firstName: -1,
@@ -160,7 +138,7 @@ export default function Home() {
   if (shareLink) {
     return (
       <Success
-        onConfirm={handleCancelMapping}
+        onConfirm={handleReset}
         confirmText="Upload Another File"
         content={
           <>
@@ -193,9 +171,9 @@ export default function Home() {
             mapping={columnMapping}
             onChange={handleMappingChange}
             onConfirm={handleConfirmMapping}
-            onCancel={handleCancelMapping}
+            onCancel={handleReset}
             isLoading={isLoading}
-            error={error}
+            error={error || csvParseError}
           />
         ) : (
           <UploadFile

@@ -8,7 +8,7 @@ export default function UploadFile({
 }: {
   file: File | null;
   onFileUpload: (event: ChangeEvent<HTMLInputElement>) => void;
-  handleParseFile: (hasHeader: boolean) => void;
+  handleParseFile: (file: File | null, hasHeader: boolean) => void;
 }) {
   if (!file) {
     return (
@@ -43,13 +43,13 @@ export default function UploadFile({
           </p>
           <div className="flex justify-center gap-4">
             <button
-              onClick={() => handleParseFile(false)}
+              onClick={() => handleParseFile(file, false)}
               className="px-6 py-3 rounded-lg transition-all text-white hover:opacity-80"
             >
               No, it doesn't
             </button>
             <button
-              onClick={() => handleParseFile(true)}
+              onClick={() => handleParseFile(file, true)}
               className="px-6 py-3 rounded-lg !bg-indigo-600 transition-all text-white hover:opacity-80"
             >
               Yes, it has headers
