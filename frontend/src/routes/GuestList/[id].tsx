@@ -1,5 +1,6 @@
 import { getGuestList } from "@/services/apiClient";
 import { Column } from "@/types/table";
+import Error from "@/ui/Error";
 import Loading from "@/ui/Loading";
 import { Table } from "@/ui/Table";
 import { useEffect, useState } from "react";
@@ -22,6 +23,7 @@ const columns: Column<Guest>[] = [
 export default function GuestList() {
   const { id } = useParams() as { id: string };
   const [guests, setGuests] = useState<Guest[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -29,9 +31,15 @@ export default function GuestList() {
     const fetchGuestList = async () => {
       try {
         const guestList = await getGuestList(id);
-        setGuests(guestList.data);
+        const data = guestList.data;
+        console.log(data);
+        if (data.length === 0) {
+          setError("No guests found for this list.");
+        } else {
+          setGuests(data);
+        }
       } catch (error) {
-        console.error("Error fetching guest list:", error);
+        setError("Error fetching guest list. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -42,7 +50,15 @@ export default function GuestList() {
   if (loading) {
     return <Loading />;
   }
-
+  if (error) {
+    return (
+      <Error
+        confirmText="Go Back"
+        onConfirm={() => navigate("/")}
+        content={<span className="text-red-500 mb-6">{error}</span>}
+      />
+    );
+  }
   return (
     <div className="min-h-screen w-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">

@@ -15,6 +15,8 @@ export interface ColumnMappingProps {
   ) => void;
   onConfirm: () => void;
   onCancel: () => void;
+  isLoading: boolean;
+  error: string | null;
 }
 
 const FIELD_LABELS: Record<keyof ColumnMappingProps["mapping"], string> = {
@@ -30,6 +32,8 @@ const ColumnMapping: React.FC<ColumnMappingProps> = ({
   onChange,
   onConfirm,
   onCancel,
+  isLoading,
+  error,
 }) => {
   const noneOption = { value: "", label: "(None)" };
   const dropdownOptions = [
@@ -65,6 +69,7 @@ const ColumnMapping: React.FC<ColumnMappingProps> = ({
           </div>
         );
       })}
+      {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
 
       <div className="mt-6 flex gap-4">
         <button
@@ -76,8 +81,9 @@ const ColumnMapping: React.FC<ColumnMappingProps> = ({
         <button
           className="flex-1 text-white py-2 rounded-md hover:bg-indigo-700 transition"
           onClick={onConfirm}
+          disabled={isLoading}
         >
-          Confirm Mapping
+          {isLoading ? "Mapping..." : "Confirm Mapping"}
         </button>
       </div>
     </div>
