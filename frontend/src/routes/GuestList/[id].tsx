@@ -37,7 +37,7 @@ export default function GuestList() {
         } else {
           setGuests(data);
         }
-      } catch (error) {
+      } catch (_error) {
         setError("Error fetching guest list. Please try again.");
       } finally {
         setLoading(false);

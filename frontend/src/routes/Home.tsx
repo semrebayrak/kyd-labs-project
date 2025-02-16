@@ -40,12 +40,13 @@ export default function Home() {
 
     const selectedFile = files[0];
     setFile(selectedFile);
+    setError(null);
   };
 
   const handleParseFile = async (hasHeader: boolean) => {
     setHasHeader(hasHeader);
     if (!file) {
-      alert("No file selected.");
+      setError("No file selected.");
       return;
     }
 
@@ -63,7 +64,7 @@ export default function Home() {
 
       setColumns(columns);
       setRows(rows);
-    } catch (error) {
+    } catch (_error) {
       setError("Error reading CSV file. Please try again.");
     }
   };
@@ -108,7 +109,7 @@ export default function Home() {
       } else {
         setError("Upload failed. Check console for details.");
       }
-    } catch (err) {
+    } catch (_err) {
       setError("Error uploading CSV.");
     } finally {
       setIsLoading(false);
@@ -119,6 +120,7 @@ export default function Home() {
     setShareLink(null);
     setFile(null);
     setColumns([]);
+    setRows([]);
     setHasHeader(undefined);
     setColumnMapping({
       firstName: -1,
