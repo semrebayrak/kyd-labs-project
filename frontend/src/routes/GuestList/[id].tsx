@@ -1,6 +1,6 @@
 import { getGuestList } from "@/services/apiClient";
 import { Column } from "@/types/table";
-import { Error, Loading, Table } from "@/ui";
+import { Button, Error, Loading, Table } from "@/ui";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -60,12 +60,12 @@ export default function GuestList() {
     <div className="min-h-screen w-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-center mb-8 relative">
-          <button
+          <Button
             onClick={() => navigate("/")}
-            className="absolute left-0 top-2 flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="absolute left-0 top-2 flex items-center gap-2"
           >
             Back
-          </button>
+          </Button>
           <h1 className="text-3xl font-bold text-gray-900">Guest List</h1>
         </div>
         <Table data={guests} columns={columns} />

@@ -1,4 +1,5 @@
 import { errorIcon } from "@/assets/icons";
+import { Button } from "@/ui";
 
 interface ErrorProps {
   onConfirm: () => void;
@@ -23,12 +24,9 @@ export default function Error({
             />
           </div>
           {content}
-          <button
-            onClick={onConfirm}
-            className="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-          >
+          <Button onClick={onConfirm} className="!bg-red-600">
             {confirmText}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

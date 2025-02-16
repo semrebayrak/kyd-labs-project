@@ -1,4 +1,5 @@
 import { checkIcon } from "@/assets/icons";
+import { Button } from "@/ui";
 
 interface SuccessProps {
   onConfirm: () => void;
@@ -23,12 +24,9 @@ export default function Success({
             />
           </div>
           {content}
-          <button
-            onClick={onConfirm}
-            className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors"
-          >
+          <Button onClick={onConfirm} className="!bg-green-600">
             {confirmText}
-          </button>
+          </Button>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Select } from "@/ui";
+import { Button, Select } from "@/ui";
 import React from "react";
 
 export interface ColumnMappingProps {
@@ -72,19 +72,12 @@ const ColumnMapping: React.FC<ColumnMappingProps> = ({
       {error && <div className="text-red-500 mb-4 text-center">{error}</div>}
 
       <div className="flex mt-6 gap-4">
-        <button
-          className="w-36 !bg-red-600 text-white py-2 rounded-md hover:bg-red-700 transition"
-          onClick={onCancel}
-        >
+        <Button className="!w-36 !bg-red-600" onClick={onCancel}>
           Cancel
-        </button>
-        <button
-          className="flex-1 text-white py-2 rounded-md hover:bg-indigo-700 transition"
-          onClick={onConfirm}
-          disabled={isLoading}
-        >
+        </Button>
+        <Button className="flex-1" onClick={onConfirm} disabled={isLoading}>
           {isLoading ? "Mapping..." : "Confirm Mapping"}
-        </button>
+        </Button>
       </div>
     </div>
   );

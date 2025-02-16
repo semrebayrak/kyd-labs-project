@@ -1,4 +1,5 @@
 import { addIcon } from "@/assets/icons";
+import { Button } from "@/ui";
 import { ChangeEvent } from "react";
 
 export default function UploadFile({
@@ -42,18 +43,15 @@ export default function UploadFile({
             A header row contains column names like "Name", "Email", etc.
           </p>
           <div className="flex justify-center gap-4">
-            <button
-              onClick={() => handleParseFile(file, false)}
-              className="px-6 py-3 rounded-lg transition-all text-white hover:opacity-80"
-            >
+            <Button onClick={() => handleParseFile(file, false)}>
               No, it doesn't
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() => handleParseFile(file, true)}
-              className="px-6 py-3 rounded-lg !bg-indigo-600 transition-all text-white hover:opacity-80"
+              className="!bg-indigo-600"
             >
               Yes, it has headers
-            </button>
+            </Button>
           </div>
         </div>
       </div>
