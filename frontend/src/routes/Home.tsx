@@ -107,7 +107,7 @@ export default function Home() {
       if (res.success) {
         setShareLink(res.shareableLink);
       } else {
-        setError("Upload failed. Check console for details.");
+        setError("Upload failed.");
       }
     } catch (_err) {
       setError("Error uploading CSV.");
