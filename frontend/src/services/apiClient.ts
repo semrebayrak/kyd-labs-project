@@ -1,24 +1,8 @@
+import { GuestListResponse, UploadCSVResponse } from "@/types/api";
+
 const baseURL =
   import.meta.env.VITE_BACKEND_URL ||
   "https://ukhsm5rbs2.execute-api.us-east-1.amazonaws.com";
-
-type GuestListResponse = {
-  data: {
-    guestId: string;
-    firstName: string;
-    lastName: string;
-    numberOfTickets: number;
-    notes: string;
-    listId: string;
-    order: number;
-  }[];
-};
-
-type UploadCSVResponse = {
-  success: boolean;
-  shareableLink: string;
-  listId: string;
-};
 
 export async function getGuestList(id: string): Promise<GuestListResponse> {
   const res = await fetch(`${baseURL}/guestlist/${id}`);
